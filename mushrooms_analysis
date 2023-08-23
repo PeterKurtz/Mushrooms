@@ -1,0 +1,227 @@
+proc import out=mushrooms
+	datafile ='/home/u62270496/Projects/mushrooms.csv'
+	dbms=csv
+	replace;
+	getnames=YES;
+run;
+
+%let variables = class cap_shape cap_surface cap_color bruises odor gill_attachment gill_spacing gill_size gill_color stalk_shape stalk_root stalk_surface_above_ring stalk_surface_below_ring stalk_color_above_ring stalk_color_below_ring veil_type veil_color ring_number ring_type spore_print_color population habitat;
+
+proc freq data=mushrooms;
+	table &variables;
+run;
+
+proc sql;
+	create table mushroomsNum as
+	select *,
+	case	
+		when class = 'p' then 0
+		when class = 'e' then 1
+	end as class_num,
+	
+	case
+		when cap_shape='b' then 0
+		when cap_shape='c' then 1
+		when cap_shape='f' then 2
+		when cap_shape='k' then 3
+		when cap_shape='s' then 4
+		when cap_shape='x' then 5
+	end as cap_shape_num,
+	
+	case
+		when cap_surface = 'f' then 0
+		when cap_surface='g' then 1
+		when cap_surface='y' then 2
+		when cap_surface='s' then 3
+	end as cap_surface_num,
+	
+	case
+		when cap_color = 'n' then 0
+		when cap_color = 'b' then 1
+		when cap_color = 'c' then 2
+		when cap_color = 'g' then 3
+		when cap_color = 'r' then 4
+		when cap_color = 'p' then 5
+		when cap_color = 'u' then 6
+		when cap_color = 'e' then 7
+		when cap_color = 'w' then 8
+		when cap_color = 'y' then 9
+	end as cap_color_num,
+	
+	case
+		when bruises = 't' then 0
+		when bruises = 'f' then 1
+	end as bruises_num,
+	
+	case
+		when odor = 'a' then 0
+		when odor = 'l' then 1
+		when odor = 'c' then 2
+		when odor = 'y' then 3
+		when odor = 'f' then 4
+		when odor = 'm' then 5
+		when odor = 'n' then 6
+		when odor = 'p' then 7
+		when odor = 's' then 8
+	end as odor_num,
+	
+	case
+		when gill_attachment = 'a' then 0
+		when gill_attachment = 'd' then 1
+		when gill_attachment = 'f' then 2
+		when gill_attachment = 'n' then 3
+	end as gill_attachment_num,
+	
+	case
+		when gill_spacing = 'c' then 0
+		when gill_spacing = 'w' then 1
+		when gill_spacing = 'd' then 2
+	end as gill_spacing_num,
+	
+	case
+		when gill_size = 'b' then 0
+		when gill_size = 'n' then 1
+	end as gill_size_num,
+	
+	case
+		when gill_color = 'k' then 0
+		when gill_color = 'n' then 1
+		when gill_color = 'b' then 2
+		when gill_color = 'h' then 3
+		when gill_color = 'g' then 4
+		when gill_color = 'r' then 5
+		when gill_color = 'o' then 6
+		when gill_color = 'p' then 7
+		when gill_color = 'u' then 8
+		when gill_color = 'e' then 9
+		when gill_color = 'w' then 10
+		when gill_color = 'y' then 11
+	end as gill_color_num,
+	
+	case
+		when stalk_shape = 'e' then 0
+		when stalk_shape = 't' then 1
+	end as stalk_shape_num,
+	
+	case
+		when stalk_root = 'b' then 0
+		when stalk_root = 'c' then 1
+		when stalk_root = 'u' then 2
+		when stalk_root = 'e' then 3
+		when stalk_root = 'z' then 4
+		when stalk_root = 'r' then 5
+		when stalk_root = '?' then 6
+	end as stalk_root_num,
+	
+	case
+		when stalk_surface_above_ring = 'f' then 0
+		when stalk_surface_above_ring = 'y' then 1
+		when stalk_surface_above_ring = 'k' then 2
+		when stalk_surface_above_ring = 's' then 3
+	end as stalk_surface_above_ring_num,
+	
+	case
+		when stalk_surface_below_ring = 'f' then 0
+		when stalk_surface_below_ring = 'y' then 1
+		when stalk_surface_below_ring = 'k' then 2
+		when stalk_surface_below_ring = 's' then 3
+	end as stalk_surface_below_ring_num,
+	
+	case
+		when stalk_color_above_ring = 'n' then 0
+		when stalk_color_above_ring = 'b' then 1
+		when stalk_color_above_ring = 'c' then 2
+		when stalk_color_above_ring = 'g' then 3
+		when stalk_color_above_ring = 'o' then 4
+		when stalk_color_above_ring = 'p' then 5
+		when stalk_color_above_ring = 'e' then 6
+		when stalk_color_above_ring = 'w' then 7
+		when stalk_color_above_ring = 'y' then 8
+	end as stalk_color_above_ring_num,
+	
+	case
+		when stalk_color_below_ring = 'n' then 0
+		when stalk_color_below_ring = 'b' then 1
+		when stalk_color_below_ring = 'c' then 2
+		when stalk_color_below_ring = 'g' then 3
+		when stalk_color_below_ring = 'o' then 4
+		when stalk_color_below_ring = 'p' then 5
+		when stalk_color_below_ring = 'e' then 6
+		when stalk_color_below_ring = 'w' then 7
+		when stalk_color_below_ring = 'y' then 8
+	end as stalk_color_below_ring_num,
+	
+	case
+		when veil_type = 'p' then 0
+		when veil_type = 'u' then 1
+	end as veil_type_num,
+	
+	case
+		when veil_color = 'n' then 0
+		when veil_color = 'o' then 1
+		when veil_color = 'w' then 2
+		when veil_color = 'y' then 3
+	end as veil_color_num,
+	
+	case
+		when ring_number = 'n' then 0
+		when ring_number = 'o' then 1
+		when ring_number = 't' then 2
+	end as ring_number_num,
+	
+	case	
+		when ring_type = 'c' then 0
+		when ring_type = 'e' then 1
+		when ring_type = 'f' then 2
+		when ring_type = 'l' then 3
+		when ring_type = 'n' then 4
+		when ring_type = 'p' then 5
+		when ring_type = 's' then 6
+		when ring_type = 'z' then 7
+	end as ring_type_num,
+	
+	case	
+		when spore_print_color = 'k' then 0
+		when spore_print_color = 'n' then 1
+		when spore_print_color = 'b' then 2
+		when spore_print_color = 'h' then 3
+		when spore_print_color = 'r' then 4
+		when spore_print_color = 'o' then 5
+		when spore_print_color = 'u' then 6
+		when spore_print_color = 'w' then 7
+		when spore_print_color = 'y' then 8
+	end as spore_print_color_num,
+	
+	case	
+		when population = 'a' then 0
+		when population = 'c' then 1
+		when population = 'n' then 2
+		when population = 's' then 3
+		when population = 'v' then 4
+		when population = 'y' then 5
+	end as population_num,
+		
+	case
+		when habitat = 'g' then 0
+		when habitat = 'l' then 1
+		when habitat = 'm' then 2
+		when habitat = 'p' then 3
+		when habitat = 'u' then 4
+		when habitat = 'w' then 5
+		when habitat = 'd' then 6
+	end as habitat_num
+	from mushrooms;
+quit;
+
+data mushroomsNum;
+   set mushroomsNum;
+   drop &variables;
+run;
+
+%let num_variables = cap_shape_num cap_surface_num cap_color_num bruises_num odor_num gill_attachment_num gill_spacing_num gill_size_num gill_color_num stalk_shape_num stalk_root_num stalk_surface_above_ring_num stalk_surface_below_ring_num stalk_color_above_ring_num stalk_color_below_ring_num veil_type_num veil_color_num ring_number_num ring_type_num spore_print_color_num population_num habitat_num;
+
+proc discrim data=mushroomsNum method=npar k=8 crossvalidate;
+	class class_num;
+	var &num_variables;
+	priors proportional;
+run;
